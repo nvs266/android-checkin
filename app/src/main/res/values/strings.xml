@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Check-in</string>
+    <string name="title_login">Đăng nhập</string>
+    <string name="title_password">Mật khẩu</string>
+    <string name="title_email">Email</string>
+    <string name="msg_email_should_not_empty">Email không được bỏ trống!</string>
+    <string name="msg_password_should_not_empty">Mật khẩu không được bỏ trống!</string>
+    <string name="msg_email_not_match">Emai nhập không chính xác!</string>
+    <string name="msg_wrong_email_or_password">Email hoặc mât khẩu không chính xác!</string>
+    <string name="msg_something_went_wrong">Có lỗi! Vui lòng thử lại!</string>
+    <string name="msg_check_internet_connection">Kiểm tra kết nối mạng!</string>
+    <string name="msg_login_successful">Đăng nhập thành công!</string>
 </resources>
