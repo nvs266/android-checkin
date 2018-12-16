@@ -3,5 +3,8 @@
     <dimen name="dp_48">48dp</dimen>
     <dimen name="dp_16">16dp</dimen>
     <dimen name="dp_32">32dp</dimen>
+    <dimen name="dp_137">137dp</dimen>
+    <dimen name="dp_243">243dp</dimen>c
     <dimen name="sp_48">48sp</dimen>
+
 </resources>
