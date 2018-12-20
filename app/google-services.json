@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "742892322160",
+    "firebase_url": "https://testfcm-16260.firebaseio.com",
+    "project_id": "testfcm-16260",
+    "storage_bucket": "testfcm-16260.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:742892322160:android:e1c6c4f6c8aaf88d",
+        "android_client_info": {
+          "package_name": "uet.vnu.check_in"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "742892322160-n2geug6f6f8102e0naodstrf30ejh993.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "uet.vnu.check_in",
+            "certificate_hash": "5deebcd15197fc4facb923e7df838fbf6475aeb9"
+          }
+        },
+        {
+          "client_id": "742892322160-6430lmidbv1ql168a069952egntouvtl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDH1kitbzUU2GVxANMFaOXEdbQ7MHh1fB0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "742892322160-6430lmidbv1ql168a069952egntouvtl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "742892322160-o7pdfbb978v1c2t3cslb1cpdjt3081uh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.honghaiFCM"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -68,6 +68,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 Toast.makeText(this, "login", Toast.LENGTH_SHORT).show();
                 register();
                 break;
+            case R.id.bt_comeback_login :
+                super.onBackPressed();
+                break;
         }
     }
 
@@ -125,7 +128,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                                 Toast.LENGTH_SHORT).show();
                         break;
                     case 1:
-                        notifyLoginSuccessful(registerResponse.getStudent());
+//                        notifyLoginSuccessful(registerResponse.getStudentId());
                         break;
                     default:
                         Toast.makeText(RegisterActivity.this,
@@ -195,8 +198,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
         findViewById(R.id.bt_comeback_login).setOnClickListener(this);
         findViewById(R.id.bt_register).setOnClickListener(this);
+        findViewById(R.id.bt_comeback_login).setOnClickListener(this);
 
         mProgressBarLoading = findViewById(R.id.progress_circular_loading);
+
     }
 
     private boolean validateEmailAndPassword(String email, String password, String confirmPassword) {

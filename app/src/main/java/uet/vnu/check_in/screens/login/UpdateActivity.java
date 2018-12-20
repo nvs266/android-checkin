@@ -1,5 +1,7 @@
 package uet.vnu.check_in.screens.login;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.app.Activity;
 import android.text.Editable;
@@ -10,11 +12,18 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.esafirm.imagepicker.features.ImagePicker;
+import com.esafirm.imagepicker.features.ReturnMode;
+import com.esafirm.imagepicker.model.Image;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.widget.ImageViewCompat;
@@ -27,6 +36,7 @@ import io.reactivex.schedulers.Schedulers;
 import retrofit2.HttpException;
 import uet.vnu.check_in.CheckInApplication;
 import uet.vnu.check_in.R;
+import uet.vnu.check_in.data.model.Student;
 import uet.vnu.check_in.data.source.local.AuthenticationLocalDataSource;
 import uet.vnu.check_in.data.source.remote.AuthenticationRemoteDataSource;
 import uet.vnu.check_in.data.source.remote.api.response.LoginResponse;
@@ -43,6 +53,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private AppCompatImageView mImageViewPicker;
 
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+    private static final int RC_CAMERA = 3000;
 
     @Override
     protected int getLayoutResource() {
@@ -69,11 +80,41 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.imv_picker_image :
                 Log.d("cuoghx", "onClick: image" );
+                captureImage();
                 break;
             default:
                 break;
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == RC_CAMERA) {
+            if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                captureImage();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    private void captureImage() {
+//        ImagePicker.cameraOnly().start(this);
+//        ImagePicker.cameraOnly().start(this);
+        ImagePicker.create(this).showCamera(true).limit(3).returnMode(ReturnMode.NONE).start();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, final int resultCode, Intent data) {
+        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
+            // Get a list of picked images
+            List<Image> images = ImagePicker.getImages(data);
+            Image image = ImagePicker.getFirstImageOrNull(data);
+            File imgFile = new  File(images.get(0).getPath());
+
+            Picasso.get().load(imgFile).into(mImageViewPicker);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     private void setupView(){
         this.mInputLayoutName = findViewById(R.id.til_name);
         this.mInputEditName = findViewById(R.id.tiet_name);
@@ -86,6 +127,10 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         this.mInputEditName.addTextChangedListener(this);
         this.mInputEditTextBirthday.addTextChangedListener(this);
         findViewById(R.id.bt_continue).setOnClickListener(this);
+
+        Student student = AuthenticationLocalDataSource.getInstance(CheckInApplication.getInstance().getSharedPrefsApi()).getLoggedStudent();
+        this.mInputEditName.setText(student.getName());
+        mInputEditTextBirthday.setText(student.getBirthday());
     }
     private void onclickContinue() {
         String name = String.valueOf(this.mInputEditName.getText());
@@ -194,7 +239,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             mInputLayoutBirthday.setError(getString(R.string.msg_birthday_should_not_empty));
             validate = false;
         }else if (!StringUtils.isValidDateFormat("dd/MM/yyyy", birthday)){
-            mInputLayoutBirthday.setError(getString(R.string.msg_birthday_should_not_empty));
+            mInputLayoutBirthday.setError(getString(R.string.birthday_should_match_dateformat));
             validate = false;
         }
 

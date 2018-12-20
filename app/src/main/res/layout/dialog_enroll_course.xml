@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="200dp">
+    <TextView
+        android:id="@+id/tv"
+        android:textStyle="bold"
+        android:textSize="@dimen/dp_16"
+        android:layout_margin="@dimen/dp_16"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_enter_code_course"/>
+
+    <EditText
+        android:id="@+id/edt_code_dialog"
+        android:hint="Code"
+        android:layout_margin="@dimen/dp_16"
+        android:layout_below="@id/tv"
+        android:layout_width="match_parent"
+        android:layout_height= "wrap_content"/>
+
+    <LinearLayout
+        android:layout_margin="@dimen/dp_16"
+        android:layout_below="@id/edt_code_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:gravity="center"
+            android:text="@string/str_enroll"
+            android:layout_weight="1"
+            android:id="@+id/tv_enroll_dialog"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="8dp"/>
+        <TextView
+            android:id="@+id/tv_cancel_dialog"
+            android:gravity="center"
+            android:text="Cancel"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+</RelativeLayout>

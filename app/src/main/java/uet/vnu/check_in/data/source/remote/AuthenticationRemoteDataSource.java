@@ -1,8 +1,13 @@
 package uet.vnu.check_in.data.source.remote;
 
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import io.reactivex.Observable;
+import uet.vnu.check_in.data.model.Course;
 import uet.vnu.check_in.data.source.AuthenticationDataSource;
+import uet.vnu.check_in.data.source.remote.api.response.BaseResponse;
+import uet.vnu.check_in.data.source.remote.api.response.GetCourseByCourseResponse;
 import uet.vnu.check_in.data.source.remote.api.response.LoginResponse;
 import uet.vnu.check_in.data.source.remote.api.response.RegisterResponse;
 import uet.vnu.check_in.data.source.remote.api.service.CheckInApi;
@@ -38,4 +43,35 @@ public class AuthenticationRemoteDataSource implements AuthenticationDataSource.
     public Observable<LoginResponse> updateInformationStudent(String name, String birthday, String vectors, int student_id) {
         return mCheckInApi.updateInformationStudent(name, birthday, vectors, student_id);
     }
+
+    @Override
+    public Observable<List<Course>> enrolledCourse(int student_id) {
+        return mCheckInApi.enrolledCourse(student_id);
+    }
+
+    @Override
+    public Observable<GetCourseByCourseResponse> getCourseByCode(String code) {
+        return mCheckInApi.getCourseByCode(code);
+    }
+
+    @Override
+    public Observable<BaseResponse> enrollCourse(int studentId, int courseId) {
+        return mCheckInApi.enrollCourse(studentId, courseId);
+    }
+
+    @Override
+    public Observable<BaseResponse> unrollCourse(int studentId, int courseId) {
+        return mCheckInApi.unrollCourse(studentId, courseId);
+    }
+
+    @Override
+    public Observable<BaseResponse> sendMessage(int courseId, String message, String fromId, String isTeacher) {
+        return mCheckInApi.sendMessage(courseId, message, fromId, isTeacher);
+    }
+
+    @Override
+    public Observable<BaseResponse> forgotPasswordbyEmail(String email) {
+        return mCheckInApi.forgotByEmail(email);
+    }
+
 }
