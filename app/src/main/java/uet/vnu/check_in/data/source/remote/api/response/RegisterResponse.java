@@ -10,8 +10,8 @@ import uet.vnu.check_in.data.model.Student;
 public class RegisterResponse extends BaseResponse{
 
     @Expose
-    @SerializedName("student")
-    private Student mStudent;
+    @SerializedName("student_id")
+    private int studentId;
 
     protected RegisterResponse(Parcel in) {
         super(in);
@@ -22,11 +22,11 @@ public class RegisterResponse extends BaseResponse{
     }
 
 
-    public Student getStudent() {
-        return mStudent;
+    public int getStudentId() {
+        return studentId;
     }
 
-    public void setStudent(Student mStudent) {
-        this.mStudent = mStudent;
+    public void setStudent(int studentId) {
+        this.studentId = studentId;
     }
 }

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="uet.vnu.check_in">
+    package="uet.vnu.check_in"
+    android:largeHeap="true"
+    android:hardwareAccelerated="false">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:name=".CheckInApplication"
@@ -18,6 +21,18 @@
             android:name=".screens.login.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
+
+
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+        </activity>
+        <activity
+            android:name=".screens.login.RegisterActivity"
+            android:label="@string/title_activity_register"
+            android:theme="@style/AppTheme.NoActionBar">
+
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
 
@@ -26,25 +41,33 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".screens.login.RegisterActivity"
-            android:label="@string/title_activity_register"
-            android:theme="@style/AppTheme.NoActionBar">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
-        <activity
             android:name=".screens.login.UpdateActivity"
             android:label="@string/title_activity_update"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
+        <activity
+            android:name=".screens.home.HomeActivity"
+            android:label="@string/title_activity_home" />
+        <activity
+            android:name=".screens.home.CourseActivity"
+            android:label="@string/title_activity_course">
+        </activity>
+        <activity
+            android:name=".screens.chat.ChatlogActivity"
+            android:label="@string/title_activity_chatlog">
+        </activity>
+        <service android:name=".service.NotiService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
