@@ -2,12 +2,9 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:gravity="right"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="2dp"
-    android:layout_marginTop="2dp"
     android:layout_marginRight="8dp"
-    android:layout_marginLeft="16dp">
+    android:layout_marginLeft="@dimen/dp_48">
     <RelativeLayout
         android:id="@+id/rl_text_chat"
         android:layout_width="wrap_content"
@@ -16,21 +13,23 @@
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
         android:paddingTop="5dp"
-        android:paddingBottom="5dp">
+        android:layout_marginTop="2dp"
+        android:paddingBottom="5dp"
+        android:layout_toLeftOf="@id/iv_avatar_chat">
         <TextView
             android:id="@+id/tv_text_chat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#ececec"
-            android:text="AAAAAAAAAAAAAAAAAAAAAA"
+            android:text="AAAAAAAAAAAAAAAAAAAA"
             />
     </RelativeLayout>
     <ImageView
-        android:layout_toRightOf="@id/rl_text_chat"
+        android:layout_alignParentEnd="true"
         android:id="@+id/iv_avatar_chat"
-        android:layout_alignBottom="@id/rl_text_chat"
         android:layout_marginLeft="8dp"
         android:layout_width="20dp"
-        android:layout_height="20dp" />
+        android:layout_height="20dp"
+        android:layout_marginTop="4dp" />
 
 </RelativeLayout>
