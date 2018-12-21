@@ -13,6 +13,7 @@ public class StringUtils {
     public static boolean checkNullOrEmpty(String s) {
         return s == null || s.isEmpty();
     }
+
     public static boolean isValidDateFormat(String format, String value) {
         Date date = null;
         try {
