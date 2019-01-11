@@ -202,10 +202,10 @@ public class Navigator {
     private void setActivityTransactionAnimation(@ActivityTransition int animation) {
         switch (animation) {
             case ActivityTransition.START:
-                mActivity.overridePendingTransition(R.anim.translate_left, R.anim.translate_still);
+                mActivity.overridePendingTransition(R.anim.slide_bottom_in, R.anim.slide_top_out);
                 break;
             case ActivityTransition.FINISH:
-                mActivity.overridePendingTransition(R.anim.translate_still, R.anim.translate_right);
+                mActivity.overridePendingTransition(R.anim.slide_top_out, R.anim.slide_bottom_in);
                 break;
             case ActivityTransition.NONE:
                 break;
