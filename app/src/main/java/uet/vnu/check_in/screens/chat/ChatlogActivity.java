@@ -1,5 +1,8 @@
 package uet.vnu.check_in.screens.chat;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.app.Activity;
 import android.text.Editable;
@@ -22,10 +25,12 @@ import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.Date;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -34,6 +39,9 @@ import uet.vnu.check_in.CheckInApplication;
 import uet.vnu.check_in.R;
 import uet.vnu.check_in.data.model.ChatLog;
 import uet.vnu.check_in.data.model.Course;
+import uet.vnu.check_in.data.model.Student;
+import uet.vnu.check_in.data.source.AuthenticationDataSource;
+import uet.vnu.check_in.data.source.local.AuthenticationLocalDataSource;
 import uet.vnu.check_in.data.source.remote.AuthenticationRemoteDataSource;
 import uet.vnu.check_in.data.source.remote.api.response.BaseResponse;
 import uet.vnu.check_in.screens.BaseActivity;
@@ -47,10 +55,17 @@ public class ChatlogActivity extends BaseActivity implements View.OnClickListene
     private EditText mEditTextChat;
     private ImageView mImageViewSender;
     private Course currentCourse;
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     @Override
     protected int getLayoutResource() {
         return R.layout.activity_chatlog;
+    }
+
+    @Override
+    protected void onStop() {
+        mCompositeDisposable.clear();
+        super.onStop();
     }
 
     @Override
@@ -60,6 +75,12 @@ public class ChatlogActivity extends BaseActivity implements View.OnClickListene
     private void setupView(){
         currentCourse = new Course(getIntent().getIntExtra("course_id", 0), getIntent().getStringExtra("course_name"));
         setTitle(currentCourse.getName());
+        androidx.appcompat.app.ActionBar bar = getSupportActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#32a5d8")));
+        Toolbar actionBarToolbar = findViewById(R.id.action_bar);
+        actionBarToolbar.getOverflowIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        if (actionBarToolbar != null) actionBarToolbar.setTitleTextColor(Color.WHITE);
+
         Log.d("cuonghx", "setupView: " + currentCourse.getId());
         mRecycleView = findViewById(R.id.rcv_text_chat);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -136,8 +157,11 @@ public class ChatlogActivity extends BaseActivity implements View.OnClickListene
                 Log.d("cuonghx", "onClick: send" );
                 String message = String.valueOf(mEditTextChat.getText());
                 mEditTextChat.setText("");
+
+                Student student = AuthenticationLocalDataSource.getInstance(CheckInApplication.getInstance().getSharedPrefsApi()).getLoggedStudent();
+                mCompositeDisposable.add(
                 AuthenticationRemoteDataSource.getInstance(CheckInApplication.getInstance().getCheckInApi())
-                        .sendMessage(currentCourse.getId(), message, String.valueOf(21), "0")
+                        .sendMessage(currentCourse.getId(), message, String.valueOf(student.getId()), "0", student.getName())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnSubscribe(new Consumer<Disposable>() {
@@ -154,7 +178,7 @@ public class ChatlogActivity extends BaseActivity implements View.OnClickListene
                     public void accept(Throwable throwable) throws Exception {
                         handleErrors(throwable);
                     }
-                });
+                }));
                 break;
         }
     }

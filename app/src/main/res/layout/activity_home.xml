@@ -1,55 +1,186 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".screens.login.LoginActivity">
+    android:fitsSystemWindows="true"
+    tools:context=".screens.home.HomeActivity">
+
+    <LinearLayout
+        android:id="@+id/lnl_start"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:background="@drawable/bg_start"
+            android:alpha="0.8">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcv_home"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
 
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/bt_mycourse"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title_mycourse"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="@dimen/dp_32"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/bt_checkin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title_checkin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bt_mycourse"/>
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/bt_update"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title_update"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bt_checkin"
-        app:layout_constraintStart_toStartOf="parent"/>
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/bt_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/title_logout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bt_update"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                style="@style/Base.Widget.AppCompat.Button"
+                android:id="@+id/cv_start_course"
+                android:layout_marginStart="@dimen/padding"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:layout_marginLeft="@dimen/padding"
+                android:layout_marginRight="4dp">
+
+                <ImageView
+                    android:id="@+id/iv_teacher_list_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bg_start_teachers_list"
+                    android:scaleType="centerCrop"
+                    android:alpha="0.8"
+                    tools:ignore="UnusedAttribute"/>
+
+                <TextView
+                    android:id="@+id/tv_teacher_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textSize="30sp"
+                    android:textColor="#ffff"
+                    android:text="Khoá học" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                style="@style/Base.Widget.AppCompat.Button"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:id="@+id/cv_start_checkin"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="@dimen/padding"
+                android:layout_marginBottom="4dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="@dimen/padding">
+
+                <ImageView
+                    android:id="@+id/iv_subject_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/checkin"
+                    android:scaleType="centerCrop"
+                    android:alpha="0.8"
+                    tools:ignore="UnusedAttribute"/>
+
+                <TextView
+                    android:id="@+id/tv_subject_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Check in"
+                    android:textColor="#ffffff"
+                    android:textSize="30sp" />
+
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                style="@style/Base.Widget.AppCompat.Button"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:id="@+id/cv_start_profile"
+                android:layout_marginStart="@dimen/padding"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="@dimen/padding"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/padding"
+                android:layout_marginRight="4dp">
+
+                <ImageView
+                    android:id="@+id/iv_time_table_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/profilesetting"
+                    android:scaleType="centerCrop"
+                    android:alpha="0.8"
+                    tools:ignore="UnusedAttribute"/>
+
+                <TextView
+                    android:id="@+id/tv_time_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textSize="30sp"
+                    android:textColor="#ffff"
+                    android:text="Cập nhật thông tin"
+                    />
+            </androidx.cardview.widget.CardView>
 
 
-    <androidx.core.widget.ContentLoadingProgressBar
-        android:id="@+id/progress_circular_loading"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/bt_login"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.cardview.widget.CardView
+                style="@style/Base.Widget.AppCompat.Button"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:id="@+id/cv_start_logout"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="@dimen/padding"
+                android:layout_marginBottom="@dimen/padding"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="@dimen/padding">
+
+                <ImageView
+
+                    android:id="@+id/iv_note"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/logout"
+                    android:alpha="0.8"
+                    android:scaleType="centerCrop"
+                    tools:ignore="UnusedAttribute"/>
+
+                <TextView
+
+                    android:id="@+id/tv_note_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Đăng xuất"
+                    android:textColor="#ffff"
+                    android:textSize="30sp" />
+
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

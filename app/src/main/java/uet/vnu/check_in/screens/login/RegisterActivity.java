@@ -1,5 +1,6 @@
 package uet.vnu.check_in.screens.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.text.Editable;
@@ -31,6 +32,7 @@ import uet.vnu.check_in.data.source.remote.AuthenticationRemoteDataSource;
 import uet.vnu.check_in.data.source.remote.api.response.LoginResponse;
 import uet.vnu.check_in.data.source.remote.api.response.RegisterResponse;
 import uet.vnu.check_in.screens.BaseActivity;
+import uet.vnu.check_in.screens.home.HomeActivity;
 import uet.vnu.check_in.util.StringUtils;
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener, TextWatcher {
@@ -65,7 +67,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_register:
-                Toast.makeText(this, "login", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "login", Toast.LENGTH_SHORT).show();
                 register();
                 break;
             case R.id.bt_comeback_login :
@@ -108,43 +110,48 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         if (!validateEmailAndPassword(email, password, confirmPassword)) {
             return;
         }
-        AuthenticationRemoteDataSource.getInstance(CheckInApplication.getInstance().getCheckInApi())
-                .registerByEmailAndPassword(email, password)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Consumer<Disposable>() {
+        mCompositeDisposable.add(
+                AuthenticationRemoteDataSource.getInstance(CheckInApplication.getInstance().getCheckInApi())
+                        .registerByEmailAndPassword(email, password)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSubscribe(new Consumer<Disposable>() {
+                            @Override
+                            public void accept(Disposable disposable) throws Exception {
+                                showLoadingIndicator();
+                            }
+                        }).subscribe(new Consumer<RegisterResponse>() {
                     @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        showLoadingIndicator();
+                    public void accept(RegisterResponse registerResponse) throws Exception {
+                        hideLoadingIndicator();
+                        switch (registerResponse.getStatus()) {
+                            case -1:
+                                Toast.makeText(RegisterActivity.this,
+                                        "Email đã tồn tại!",
+                                        Toast.LENGTH_SHORT).show();
+                                break;
+                            case 1:
+                                Intent intent = new Intent(RegisterActivity.this, UpdateActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(intent);
+                                notifyLoginSuccessful(registerResponse.getStudentId());
+                                break;
+                            default:
+                                Toast.makeText(RegisterActivity.this,
+                                        R.string.msg_something_went_wrong,
+                                        Toast.LENGTH_SHORT)
+                                        .show();
+                                break;
+                        }
                     }
-                }).subscribe(new Consumer<RegisterResponse>() {
-            @Override
-            public void accept(RegisterResponse registerResponse) throws Exception {
-                hideLoadingIndicator();
-                switch (registerResponse.getStatus()) {
-                    case -1:
-                        Toast.makeText(RegisterActivity.this,
-                                "Email đã tồn tại!",
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                    case 1:
-//                        notifyLoginSuccessful(registerResponse.getStudentId());
-                        break;
-                    default:
-                        Toast.makeText(RegisterActivity.this,
-                                R.string.msg_something_went_wrong,
-                                Toast.LENGTH_SHORT)
-                                .show();
-                        break;
-                }
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                hideLoadingIndicator();
-                handleErrors(throwable);
-            }
-        });
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        hideLoadingIndicator();
+                        handleErrors(throwable);
+                    }
+                })
+        );
     }
 
     private void handleErrors(Throwable throwable) {
@@ -175,12 +182,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    private void notifyLoginSuccessful(Student student) {
-        Toast.makeText(this, R.string.msg_login_successful, Toast.LENGTH_SHORT).show();
-        AuthenticationLocalDataSource
-                .getInstance(CheckInApplication.getInstance()
-                        .getSharedPrefsApi())
-                .saveStudent(student);
+    private void notifyLoginSuccessful(int studentId) {
+//        Toast.makeText(this, R.string.msg_login_successful, Toast.LENGTH_SHORT).show();
+        AuthenticationLocalDataSource.getInstance(CheckInApplication.getInstance().getSharedPrefsApi()).saveStudent(new Student(studentId, "", "" +
+                "",  String.valueOf(mInputEditTextEmail.getText()), "", "", ""));
     }
 
     private void setUpView() {

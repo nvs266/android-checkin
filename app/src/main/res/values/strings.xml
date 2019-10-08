@@ -2,7 +2,7 @@
     <string name="app_name">Check-in</string>
     <string name="title_login">Đăng nhập</string>
     <string name="title_register">Đăng ký</string>
-    <string name="title_continue">Tiếp tục</string>
+    <string name="title_continue">Lưu</string>
     <string name="title_password">Mật khẩu</string>
     <string name="title_mycourse">Khoá học</string>
     <string name="title_checkin">Điểm danh</string>
@@ -33,4 +33,5 @@
     <string name="title_activity_chatlog">ChatlogActivity</string>
     <string name="str_send">Gửi</string>
     <string name="str_check_your_email">Kiểm tra email của bạn!</string>
+    <string name="title_activity_test">Test</string>
 </resources>

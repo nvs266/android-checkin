@@ -131,6 +131,13 @@ public class CourseAdapter extends BaseRecyclerViewAdapter<Course, CourseAdapter
                         }
                     });
                     return true;
+                case R.id.item_chat:
+                    Intent intent = new Intent(mContext, ChatlogActivity.class);
+                    intent.putExtra("course_id", tmpCourse.getId());
+                    intent.putExtra("course_name", tmpCourse.getName());
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    mContext.startActivity(intent);
+                    return true;
                 default:
                     return false;
 

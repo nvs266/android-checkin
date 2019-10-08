@@ -24,7 +24,6 @@ public class AuthenticationLocalDataSource implements AuthenticationDataSource.L
         mSharedPrefsApi = sharedPrefsApi;
     }
 
-
     @Override
     public void saveStudent(Student student) {
         String data = new Gson().toJson(student);
@@ -34,6 +33,9 @@ public class AuthenticationLocalDataSource implements AuthenticationDataSource.L
     @Override
     public void deleteStudent() {
         mSharedPrefsApi.delete(SharedPrefsKey.PREFERENCE_STUDENT_KEY);
+        mSharedPrefsApi.delete(SharedPrefsKey.AVATAR_KEY1);
+        mSharedPrefsApi.delete(SharedPrefsKey.AVATAR_KEY2);
+        mSharedPrefsApi.delete(SharedPrefsKey.AVATAR_KEY3);
     }
 
     @Override
@@ -45,5 +47,35 @@ public class AuthenticationLocalDataSource implements AuthenticationDataSource.L
     @Override
     public String getLoginToken() {
         return null;
+    }
+
+    @Override
+    public void saveImage1(String img) {
+        mSharedPrefsApi.put(SharedPrefsKey.AVATAR_KEY1, img);
+    }
+
+    @Override
+    public void saveImage2(String img) {
+        mSharedPrefsApi.put(SharedPrefsKey.AVATAR_KEY2, img);
+    }
+
+    @Override
+    public void saveImage3(String img) {
+        mSharedPrefsApi.put(SharedPrefsKey.AVATAR_KEY3, img);
+    }
+
+    @Override
+    public String getImage1() {
+        return mSharedPrefsApi.get(SharedPrefsKey.AVATAR_KEY1, String.class);
+    }
+
+    @Override
+    public String getImage2() {
+        return mSharedPrefsApi.get(SharedPrefsKey.AVATAR_KEY2, String.class);
+    }
+
+    @Override
+    public String getImage3() {
+        return  mSharedPrefsApi.get(SharedPrefsKey.AVATAR_KEY3, String.class);
     }
 }

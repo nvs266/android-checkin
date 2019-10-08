@@ -7,21 +7,17 @@
     android:keepScreenOn="true"
     android:orientation="vertical">
 
-    <uet.vnu.check_in.util.widget.CameraSourcePreview
-        android:id="@+id/firePreview"
+    <uet.vnu.check_in.classfier.CameraSourcePreview
+        android:id="@+id/preview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
+        android:layout_height="match_parent">
 
-        <uet.vnu.check_in.util.widget.GraphicOverlay
-            android:id="@+id/fireFaceOverlay"
+        <uet.vnu.check_in.classfier.GraphicOverlay
+            android:id="@+id/faceOverlay"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true" />
-    </uet.vnu.check_in.util.widget.CameraSourcePreview>
+            android:layout_height="match_parent" />
+
+    </uet.vnu.check_in.classfier.CameraSourcePreview>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text"
@@ -38,7 +34,7 @@
         android:layout_height="60dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@id/firePreview"
+        android:layout_toEndOf="@id/preview"
         android:background="#ffff">
 
         <androidx.appcompat.widget.AppCompatToggleButton
@@ -46,7 +42,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/toggle_style"
+            android:background="@drawable/ic_camera_alt_black_24dp"
             android:checked="false"
             android:textOff=""
             android:textOn="" />

@@ -15,21 +15,29 @@
         android:paddingTop="5dp"
         android:layout_marginTop="2dp"
         android:paddingBottom="5dp"
-        android:layout_toLeftOf="@id/iv_avatar_chat">
+        android:layout_alignParentEnd="true">
         <TextView
             android:id="@+id/tv_text_chat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#ececec"
             android:text="AAAAAAAAAAAAAAAAAAAA"
-            />
+            android:layout_below="@id/tv_name" />
+        <TextView
+            android:textSize="14dp"
+            android:textStyle="bold"
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hoang Cuong"/>
+        <TextView
+            android:layout_marginTop="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_date"
+            android:textSize="10dp"
+            android:layout_marginLeft="8dp"
+            android:text="10:20, 27/09"
+            android:layout_toRightOf="@id/tv_name"/>
     </RelativeLayout>
-    <ImageView
-        android:layout_alignParentEnd="true"
-        android:id="@+id/iv_avatar_chat"
-        android:layout_marginLeft="8dp"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="4dp" />
-
 </RelativeLayout>

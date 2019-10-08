@@ -5,14 +5,16 @@ public class ChatLog {
     public String fromId;
     public Boolean isTeacher;
     public Long timestamp;
+    public String name;
 
     public ChatLog(){
 
     }
-    public ChatLog(String text, String fromId, Boolean isTeacher, Long timestamp){
+    public ChatLog(String text, String fromId, Boolean isTeacher, Long timestamp, String name){
         this.text = text;
         this.fromId = fromId;
         this.isTeacher = isTeacher;
         this.timestamp = timestamp;
+        this.name = name;
     }
 }
