@@ -3,4 +3,7 @@
     <item
         android:id="@+id/item_unrollCourse"
         android:title="Xoá" />
+    <item
+        android:id="@+id/item_chat"
+        android:title="chat" />
 </menu>

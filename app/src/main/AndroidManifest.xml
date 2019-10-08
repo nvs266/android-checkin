@@ -5,10 +5,16 @@
     android:hardwareAccelerated="false"
     android:largeHeap="true">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission
+        android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission
+        android:name="android.permission.CAMERA" />
+    <uses-permission
+        android:name="android.permission.INTERNET"/>
+    <uses-permission
+        android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission
+        android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -20,6 +26,8 @@
     <application
         android:name=".CheckInApplication"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:largeHeap="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -38,11 +46,10 @@
         <activity
             android:name=".screens.login.RegisterActivity"
             android:label="@string/title_activity_register"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".screens.login.UpdateActivity"
-            android:label="@string/title_activity_update"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="@string/title_activity_update" />
         <activity
             android:name=".screens.home.HomeActivity"
             android:label="@string/title_activity_home" />
@@ -59,7 +66,19 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".screens.checkin.CheckInActivity"></activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyB_ysoJlSDbTsQzWWH7Bl8Qz0Xxzl5cIaM" />
+
+
+        <activity android:name=".screens.checkin.CheckInActivity" />
+        <activity
+            android:name=".screens.checkin.CheckInRealTime"
+            android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen" />
+        <activity
+            android:name=".screens.home.Test"
+            android:label="@string/title_activity_test">
+        </activity>
     </application>
 
 </manifest>

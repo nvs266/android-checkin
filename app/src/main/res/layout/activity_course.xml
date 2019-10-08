@@ -18,7 +18,8 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         app:fabCustomSize="60dp"
-        android:backgroundTint="@color/colorPrimary"
+        app:borderWidth="0dp"
+        android:backgroundTint="@color/blue"
         android:src="@drawable/ic_add_white_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

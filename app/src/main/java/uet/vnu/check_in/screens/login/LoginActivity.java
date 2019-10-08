@@ -95,11 +95,12 @@ public class LoginActivity extends BaseActivity implements TextWatcher, View.OnC
                     Toast.makeText(this, student.getEmail() + " logged-in", Toast.LENGTH_SHORT)
                             .show();
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intent);
                     return;
+                } else {
+                    login();
                 }
-                login();
                 break;
             case R.id.bt_to_register:
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
@@ -191,7 +192,7 @@ public class LoginActivity extends BaseActivity implements TextWatcher, View.OnC
                                     case 1:
                                         notifyLoginSuccessful(loginResponse.getStudent());
                                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
                                         startActivity(intent);
                                         break;
                                     default:
@@ -293,7 +294,8 @@ public class LoginActivity extends BaseActivity implements TextWatcher, View.OnC
             Toast.makeText(this, student.getEmail() + " logged-in", Toast.LENGTH_SHORT)
                     .show();
             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
             return;
         }

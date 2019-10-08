@@ -1,5 +1,6 @@
 package uet.vnu.check_in.screens.adapter;
 
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,9 @@ import com.squareup.picasso.Picasso;
 
 import java.net.HttpURLConnection;
 import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import androidx.core.widget.ImageViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -81,25 +85,45 @@ public class ChatLogAdapter extends BaseRecyclerViewAdapter<ChatLog, ChatLogAdap
 
     public class ViewHolder  extends RecyclerView.ViewHolder {
 
-        private TextView textViewChat;
-        private TextView textViewReply;
-        private ImageView imageViewReply;
-        private ImageView imageViewChat;
+        private TextView textView;
+        private TextView textViewName;
+        private TextView textViewDate;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            textViewChat = itemView.findViewById(R.id.tv_text_chat);
-            textViewReply = itemView.findViewById(R.id.tv_reply);
-            imageViewReply = itemView.findViewById(R.id.iv_avatar_reply);
-            imageViewChat = itemView.findViewById(R.id.iv_avatar_chat);
+            textView = itemView.findViewById(R.id.tv_text_chat);
+//            imageViewReply = itemView.findViewById(R.id.iv_avatar_reply);
+            textViewName = itemView.findViewById(R.id.tv_name);
+            textViewDate = itemView.findViewById(R.id.tv_date);
+//            imageViewChat = itemView.findViewById(R.id.iv_avatar_chat);
+            itemView.isClickable();
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    ClipboardManager cm = (ClipboardManager)itemView.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                    cm.setText(textView.getText());
+                    Toast.makeText(itemView.getContext(), "Copied to clipboard", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            });
         }
         public void updateView(ChatLog chatLog){
             if (chatLog.isTeacher){
-                textViewReply.setText(chatLog.text);
-                Picasso.get().load("https://wallpapertag.com/wallpaper/full/e/6/d/149828-fairy-tail-logo-wallpaper-1920x1200-pictures.jpg").transform(new CircleTransform()).into(imageViewReply);
+                textView.setText(chatLog.text);
+                Date d = new Date(chatLog.timestamp);
+                DateFormat f = new SimpleDateFormat("HH:mm, dd/MM");
+                System.out.println(f.format(d));
+                textViewDate.setText(f.format(d));
+                textViewName.setText(chatLog.name);
+//                Picasso.get().load("https://wallpapertag.com/wallpaper/full/e/6/d/149828-fairy-tail-logo-wallpaper-1920x1200-pictures.jpg").transform(new CircleTransform()).into(imageViewReply);
             }else {
-                textViewChat.setText(chatLog.text);
-                Picasso.get().load("https://wallpapertag.com/wallpaper/full/e/6/d/149828-fairy-tail-logo-wallpaper-1920x1200-pictures.jpg").transform(new CircleTransform()).into(imageViewChat);
+                Date d = new Date(chatLog.timestamp);
+                DateFormat f = new SimpleDateFormat("HH:mm, dd/MM");
+                System.out.println(f.format(d));
+                textViewDate.setText(f.format(d));
+                textViewName.setText(chatLog.name);
+                textView.setText(chatLog.text);
+//                Picasso.get().load("https://wallpapertag.com/wallpaper/full/e/6/d/149828-fairy-tail-logo-wallpaper-1920x1200-pictures.jpg").transform(new CircleTransform()).into(imageViewChat);
             }
         }
 

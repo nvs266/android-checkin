@@ -1,6 +1,9 @@
 package uet.vnu.check_in.screens.home;
 
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,11 +17,13 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -33,6 +38,7 @@ import uet.vnu.check_in.data.source.remote.api.response.BaseResponse;
 import uet.vnu.check_in.data.source.remote.api.response.GetCourseByCourseResponse;
 import uet.vnu.check_in.screens.BaseActivity;
 import uet.vnu.check_in.screens.adapter.CourseAdapter;
+import uet.vnu.check_in.screens.checkin.CheckInActivity;
 import uet.vnu.check_in.util.StringUtils;
 
 public class CourseActivity extends BaseActivity implements View.OnClickListener{
@@ -42,6 +48,7 @@ public class CourseActivity extends BaseActivity implements View.OnClickListener
     private Dialog dialogAddCourse;
     private EditText mEditextCode;
     private Course  tmpCourse;
+    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     @Override
     protected int getLayoutResource() {
@@ -52,6 +59,12 @@ public class CourseActivity extends BaseActivity implements View.OnClickListener
     protected void initComponents(Bundle savedInstanceState) {
         setupView();
         getdata();
+    }
+
+    @Override
+    protected void onStop() {
+        mCompositeDisposable.clear();
+        super.onStop();
     }
 
     @Override
@@ -74,40 +87,41 @@ public class CourseActivity extends BaseActivity implements View.OnClickListener
                     return;
                 }
                 dialogAddCourse.cancel();
-                AuthenticationRemoteDataSource.getInstance(CheckInApplication.getInstance().getCheckInApi())
-                        .getCourseByCode(code)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSubscribe(new Consumer<Disposable>() {
-                            @Override
-                            public void accept(Disposable disposable) throws Exception {
+                mCompositeDisposable.add(
+                    AuthenticationRemoteDataSource.getInstance(CheckInApplication.getInstance().getCheckInApi())
+                            .getCourseByCode(code)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .doOnSubscribe(new Consumer<Disposable>() {
+                                @Override
+                                public void accept(Disposable disposable) throws Exception {
 
+                                }
+                            }).subscribe(new Consumer<GetCourseByCourseResponse>() {
+                        @Override
+                        public void accept(GetCourseByCourseResponse getCourseByCourseResponse) throws Exception {
+                            if (getCourseByCourseResponse.getStatus() == 1){
+                                tmpCourse = new Course(getCourseByCourseResponse.getCourseId(), getCourseByCourseResponse.getCourseName());
+                                dialogAddCourse = new Dialog(CourseActivity.this);
+                                dialogAddCourse.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                dialogAddCourse.setCancelable(false);
+                                dialogAddCourse.setContentView(R.layout.dialog_confirm_enroll);
+                                TextView textView = dialogAddCourse.findViewById(R.id.tv_name_course_dialog);
+                                textView.setText(getCourseByCourseResponse.getCourseName());
+                                dialogAddCourse.findViewById(R.id.tv_confirmenroll_dialog).setOnClickListener(CourseActivity.this);
+                                dialogAddCourse.findViewById(R.id.tv_cancel_dialog).setOnClickListener(CourseActivity.this);
+                                dialogAddCourse.show();
+                            }else {
+                                Toast.makeText(CourseActivity.this, "Code không chính xác nhập và thử lại", Toast.LENGTH_SHORT).show();
                             }
-                        }).subscribe(new Consumer<GetCourseByCourseResponse>() {
-                    @Override
-                    public void accept(GetCourseByCourseResponse getCourseByCourseResponse) throws Exception {
-                        if (getCourseByCourseResponse.getStatus() == 1){
-                            tmpCourse = new Course(getCourseByCourseResponse.getCourseId(), getCourseByCourseResponse.getCourseName());
-                            dialogAddCourse = new Dialog(CourseActivity.this);
-                            dialogAddCourse.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            dialogAddCourse.setCancelable(false);
-                            dialogAddCourse.setContentView(R.layout.dialog_confirm_enroll);
-                            TextView textView = dialogAddCourse.findViewById(R.id.tv_name_course_dialog);
-                            textView.setText(getCourseByCourseResponse.getCourseName());
-                            dialogAddCourse.findViewById(R.id.tv_confirmenroll_dialog).setOnClickListener(CourseActivity.this);
-                            dialogAddCourse.findViewById(R.id.tv_cancel_dialog).setOnClickListener(CourseActivity.this);
-                            dialogAddCourse.show();
-                        }else {
-                            Toast.makeText(CourseActivity.this, "Code không chính xác nhập và thử lại", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        handleErrors(throwable);
-                    }
-                });
-
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            handleErrors(throwable);
+                        }
+                    })
+                );
                 break;
             case R.id.tv_cancel_dialog :
                 dialogAddCourse.cancel();
@@ -155,34 +169,42 @@ public class CourseActivity extends BaseActivity implements View.OnClickListener
         mRecyclerViewCourse.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerViewCourse.setAdapter(this.mCourseAdapterRecycleview);
         mRecyclerViewCourse.addItemDecoration(new DividerItemDecoration(mRecyclerViewCourse.getContext(), DividerItemDecoration.VERTICAL));
+
+        setTitle("Khoá học");
+        androidx.appcompat.app.ActionBar bar = getSupportActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#32a5d8")));
+        Toolbar actionBarToolbar = findViewById(R.id.action_bar);
+        actionBarToolbar.getOverflowIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        if (actionBarToolbar != null) actionBarToolbar.setTitleTextColor(Color.WHITE);
     }
     private void getdata() {
-        AuthenticationRemoteDataSource.getInstance(CheckInApplication.getInstance().getCheckInApi())
-                .enrolledCourse(21)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
+        mCompositeDisposable.add(
+            AuthenticationRemoteDataSource.getInstance(CheckInApplication.getInstance().getCheckInApi())
+                    .enrolledCourse(AuthenticationLocalDataSource.getInstance(CheckInApplication.getInstance().getSharedPrefsApi()).getLoggedStudent().getId())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe(new Consumer<Disposable>() {
+                        @Override
+                        public void accept(Disposable disposable) throws Exception {
 
+                        }
+                    }).subscribe(new Consumer<List<Course>>() {
+                @Override
+                public void accept(List<Course> courses) throws Exception {
+                    Log.d("cuonghx", "accept: " + courses.size() );
+                    for (Course course: courses) {
+                        mCourseAdapterRecycleview.addItem(course);
                     }
-                }).subscribe(new Consumer<List<Course>>() {
-            @Override
-            public void accept(List<Course> courses) throws Exception {
-                Log.d("cuonghx", "accept: " + courses.size() );
-                for (Course course: courses) {
-                    mCourseAdapterRecycleview.addItem(course);
                 }
-            }
 
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                Log.d("cuonghx", "accept: err" + throwable.getLocalizedMessage());
-                handleErrors(throwable);
-            }
-        });
-
+            }, new Consumer<Throwable>() {
+                @Override
+                public void accept(Throwable throwable) throws Exception {
+                    Log.d("cuonghx", "accept: err" + throwable.getLocalizedMessage());
+                    handleErrors(throwable);
+                }
+            })
+        );
     }
     private void handleErrors(Throwable throwable) {
         if (throwable instanceof HttpException) {

@@ -64,9 +64,10 @@
 
 
     <com.google.android.material.button.MaterialButton
+        android:backgroundTint="@color/blue"
         android:id="@+id/bt_login"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_width="200dp"
         android:text="@string/title_login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
