@@ -17,10 +17,16 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -148,6 +154,7 @@ public class CourseActivity extends BaseActivity implements View.OnClickListener
                         if (baseResponse.getStatus() == 1){
                             Toast.makeText(CourseActivity.this, "Thành công!", Toast.LENGTH_SHORT).show();
                             mCourseAdapterRecycleview.addItem(tmpCourse);
+                            CourseActivity.this.subscribeToTopics(String.valueOf(tmpCourse.getId()));
                         }else{
                             Toast.makeText(CourseActivity.this, "Bạn đã tham gia vào khoá học rồi!", Toast.LENGTH_SHORT).show();
                         }
@@ -161,6 +168,16 @@ public class CourseActivity extends BaseActivity implements View.OnClickListener
                 break;
         }
     }
+
+    private void subscribeToTopics(String topic) {
+        FirebaseMessaging.getInstance().subscribeToTopic(topic)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                    }
+                });
+    }
+
     private void setupView(){
         mRecyclerViewCourse = findViewById(R.id.rcv_course);
         findViewById(R.id.fab_add_course).setOnClickListener(this);

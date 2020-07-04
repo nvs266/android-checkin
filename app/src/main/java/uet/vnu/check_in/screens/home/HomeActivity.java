@@ -34,6 +34,11 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -156,7 +161,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                         Log.d("cuonghx", "accept: " + courses.size() );
                         for (Course course: courses) {
                             mCourseAdapterRecycleview.addItem(course);
+                            HomeActivity.this.subscribeToTopics(String.valueOf(course.getId()));
                         }
+
                     }
 
                 }, new Consumer<Throwable>() {
@@ -168,6 +175,25 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 })
         );
     }
+
+    private void subscribeToTopics(String topic) {
+        FirebaseMessaging.getInstance().subscribeToTopic(topic)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                    }
+                });
+    }
+
+    private void unsubscribeToTopics(String topic) {
+        FirebaseMessaging.getInstance().subscribeToTopic(topic)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                    }
+                });
+    }
+
     private void handleErrors(Throwable throwable) {
         if (throwable instanceof HttpException) {
             handleHttpExceptions((HttpException) throwable);
@@ -271,6 +297,12 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 //            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
                 Log.d("cuonghx", "onClick: logout");
+                if (mCourseAdapterRecycleview == null || mCourseAdapterRecycleview.getCollection() == null) {
+                    return;
+                }
+                for (Course course: mCourseAdapterRecycleview.getCollection()) {
+                    HomeActivity.this.unsubscribeToTopics(String.valueOf(course.getId()));
+                }
                 break;
         }
     }

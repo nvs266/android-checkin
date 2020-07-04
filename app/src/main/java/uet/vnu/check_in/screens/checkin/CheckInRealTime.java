@@ -142,10 +142,12 @@ public class CheckInRealTime extends CameraActivity implements ImageReader.OnIma
 
     @Override
     public void onStop() {
+        if (toast != null) {
+            toast.cancel();
+        }
         mCompositeDisposable.clear();
         super.onStop();
         active = false;
-        toast.cancel();
     }
 
     @Override
@@ -288,6 +290,10 @@ public class CheckInRealTime extends CameraActivity implements ImageReader.OnIma
                         Log.d("cuonghx", "run: loop");
                         if (toast != null) {
                             toast.cancel();
+                            toast = null;
+                            requestRender();
+                            readyForNextImage();
+                            return;
                         }
                         GPSTracker gps = new GPSTracker(CheckInRealTime.this);
                         if (!gps.canGetLocation()) {
@@ -327,8 +333,15 @@ public class CheckInRealTime extends CameraActivity implements ImageReader.OnIma
                                     Log.d("cuonghx", "onCheckedChanged: start checkin" + locationGPS.longtitude);
                                     success(locationGPS.lattitude, locationGPS.longtitude, ImageUtils.RotateBitmap(rgbFrameBitmap, 270));
                                 } else {
-                                    toast = Toast.makeText(CheckInRealTime.this, "Xin chờ !", Toast.LENGTH_SHORT);
-                                    toast.show();
+                                    if (toast != null) {
+                                        toast.cancel();
+                                        toast = null;
+                                    }
+                                    if (toast == null || toast.getView().getWindowVisibility() != View.VISIBLE) {
+                                        toast = Toast.makeText(CheckInRealTime.this, "Xin chờ !", Toast.LENGTH_SHORT);
+                                        toast.show();
+                                    }
+
                                     requestRender();
                                     readyForNextImage();
                                  }
@@ -358,6 +371,9 @@ public class CheckInRealTime extends CameraActivity implements ImageReader.OnIma
 
                     switch (checkinResponse.getStatus()){
                         case -1:
+                            if (dialog != null && dialog.isShowing()) {
+                                return;
+                            }
                             dialog = new Dialog(CheckInRealTime.this);
                             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                             dialog.setCancelable(false);
@@ -377,6 +393,9 @@ public class CheckInRealTime extends CameraActivity implements ImageReader.OnIma
                             }
                             break;
                         case -2:
+                            if (dialog != null && dialog.isShowing()) {
+                                return;
+                            }
                             dialog = new Dialog(CheckInRealTime.this);
                             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                             dialog.setCancelable(false);
@@ -391,6 +410,9 @@ public class CheckInRealTime extends CameraActivity implements ImageReader.OnIma
                             dialog.show();
                             break;
                         case 1:
+                            if (dialog != null && dialog.isShowing()) {
+                                return;
+                            }
     //                        wait = !wait;
                             dialog = new Dialog(CheckInRealTime.this);
                             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -604,7 +626,7 @@ public class CheckInRealTime extends CameraActivity implements ImageReader.OnIma
     @Override
     public void onLocationChanged(Location location) {
         locationGPS = new LocationGPS(location.getLatitude(), location.getLongitude());
-        Log.d("cuonghx", "onLocationChanged: ");
+        Log.d("cuonghx", "onLocationChanged: " + locationGPS.toString());
     }
 
 
